@@ -1,3 +1,15 @@
-spring:
-  application:
-    name: ai-service
+#spring:
+#  application:
+#    name: ai-service
+
+server:
+  port: 8081 # REST API Port
+
+grpc:
+  server:
+    port: 6565 # gRPC Port
+
+logging:
+  level:
+    net.devh.boot.grpc: DEBUG
+    io.grpc: DEBUG

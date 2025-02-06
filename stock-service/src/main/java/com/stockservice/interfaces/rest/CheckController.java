@@ -1,7 +1,9 @@
 package com.stockservice.interfaces.rest;
 
+
+import com.stockservice.services.grpc.GrpcClientServiceImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import net.devh.boot.grpc.client.inject.GrpcClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,14 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "CHECK API", description = "Endpoints for interacting with the Stock service")
 public class CheckController {
 
-    private final GrpcClient grpcClient;
-
-    public CheckController(GrpcClient grpcClient) {
-        this.grpcClient = grpcClient;
+    private final GrpcClientServiceImpl grpcClientService;
+    public CheckController(
+            @Autowired GrpcClientServiceImpl grpcClientService) {
+        this.grpcClientService = grpcClientService;
     }
 
     @GetMapping("/start-process")
     public String startProcess(@RequestParam String command) {
-        return grpcClient.sendStartProcessCommand(command);
+        return grpcClientService.sendStartProcessCommand(command);
     }
 }
