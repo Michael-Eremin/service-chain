@@ -3,5 +3,9 @@ spring:
     name: stock-service
 
 server:
-  port: 8082
+  port: ${SERVER_PORT}
 
+grpc:
+  server:
+    address: ${GRPC_SERVER_ADDRESS}
+    port: ${GRPC_SERVER_PORT}
