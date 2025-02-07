@@ -7,5 +7,9 @@ server:
 
 grpc:
   server:
-    address: ${GRPC_SERVER_ADDRESS}
-    port: ${GRPC_SERVER_PORT}
+    proc1:
+      address: ${GRPC_SERVER_ADDRESS_1}
+      port: ${GRPC_SERVER_PORT_1}
+    proc2:
+      address: ${GRPC_SERVER_ADDRESS_2}
+      port: ${GRPC_SERVER_PORT_2}

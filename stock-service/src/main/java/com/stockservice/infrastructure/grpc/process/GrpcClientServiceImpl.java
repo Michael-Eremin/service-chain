@@ -1,4 +1,4 @@
-package com.stockservice.infrastructure.grpc;
+package com.stockservice.infrastructure.grpc.process;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -14,10 +14,10 @@ import java.util.concurrent.TimeUnit;
 public class GrpcClientServiceImpl {
     private ManagedChannel channel;
     private ProcessServiceGrpc.ProcessServiceBlockingStub stub;
-    @Value("${grpc.server.address}")
-    private  String address;
-    @Value("${grpc.server.port}")
-    private  int port;
+    @Value("${grpc.server.proc1.address}")
+    private  String address1;
+    @Value("${grpc.server.proc1.port}")
+    private  int port1;
 
 
     public GrpcClientServiceImpl() {}
@@ -26,7 +26,7 @@ public class GrpcClientServiceImpl {
     @PostConstruct
     public void init() {
         // Create channel
-        this.channel = ManagedChannelBuilder.forAddress(address, port)
+        this.channel = ManagedChannelBuilder.forAddress(address1, port1)
                 .usePlaintext()
                 .build();
         // Create stub for method call

@@ -11,8 +11,11 @@ def simulate_process(plan_id):
     return f"RETURN Process finished with planId={plan_id}"
 
 if __name__ == '__main__':
+    print("call process_chain")
+
     parser = argparse.ArgumentParser(description="Process simulate")
     parser.add_argument("--plan", type=int, required=True, help="ID плана")
     args = parser.parse_args()
+    print("args.plan", args.plan)
 
     simulate_process(args.plan)

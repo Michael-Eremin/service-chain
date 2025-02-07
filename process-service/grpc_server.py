@@ -2,38 +2,55 @@ import grpc
 from concurrent import futures
 import logging
 import subprocess
-import process_pb2
-import process_pb2_grpc
+import process2_pb2  # Изменено: Импортируем сгенерированный модуль process2_pb2
+import process2_pb2_grpc  # Изменено: Импортируем сгенерированный модуль process2_pb2_grpc
 
-
+# Настройка логирования
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class ProcessServiceServicer(process_pb2_grpc.ProcessServiceServicer):
-    def StartProcess(self, request, context):
 
+# Реализация сервиса SolverService
+class SolverServiceServicer(process2_pb2_grpc.SolverServiceServicer):  # Изменено: Наследуемся от SolverServiceServicer
+    def StartSolver(self, request, context):  # Изменено: Метод StartSolver вместо StartProcess
+        command = request.command  # Добавлено: Получаем значение поля command
         plan_id = request.planId
-        logger.info(f"Request to start process received с planId: {plan_id}")
-
+        logger.info(f"Получен запрос на запуск solver с command: {command}, planId: {plan_id}")
         # command for call process_chain.py
+
         cmd = f"python3 process_chain.py --plan {plan_id}"
 
         try:
             # run subprocess
             process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
             logger.info(f"Command started: {cmd}")
-            return process_pb2.StartProcessResponse(message=f"Process with planId {plan_id} started. PID={process.pid}")
+            logger.info(f"process.pid {process.pid}")
+            return process2_pb2.StartSolverResponse(message=f"Solver с command={command} и planId={plan_id} успешно запущен")
         except Exception as e:
             logger.error(f"Error command: {cmd}\n{e}")
-            return process_pb2.StartProcessResponse(message=f"Error run process: {str(e)}")
+            return process2_pb2.StartSolverResponse(message=f"Error run process: {str(e)}")
 
+
+
+# Функция для запуска сервера
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    process_pb2_grpc.add_ProcessServiceServicer_to_server(ProcessServiceServicer(), server)
-    server.add_insecure_port('[::]:50051')
-    logger.info("gRPC-server is running and listening port 50051")
+
+    # Регистрируем сервис SolverService
+    process2_pb2_grpc.add_SolverServiceServicer_to_server(SolverServiceServicer(),
+                                                          server)  # Изменено: Регистрируем SolverService
+
+    # Указываем порт для прослушивания
+    server.add_insecure_port('0.0.0.0:50051')
+
+    # Логирование старта сервера
+    logger.info("gRPC-сервер SolverService запущен и слушает порт 50051")
+
+    # Запускаем сервер
     server.start()
     server.wait_for_termination()
 
+
+# Точка входа
 if __name__ == '__main__':
     serve()

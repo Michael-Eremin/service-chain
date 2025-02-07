@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.stockservice.infrastructure.grpc.process2";
+option java_outer_classname = "Process2Proto";
+
+service SolverService {
+  rpc StartSolver (StartSolverRequest) returns (StartSolverResponse);
+}
+
+message StartSolverRequest {
+  string command = 1; // Command field
+  int32 planId = 2;   // plan id field
+}
+
+message StartSolverResponse {
+  string message = 1; // response field
+}
