@@ -22,14 +22,14 @@ public class GrpcClientServiceImpl {
 
     public GrpcClientServiceImpl() {}
 
-    // Метод инициализации, который будет вызываться после внедрения значений
+
     @PostConstruct
     public void init() {
-        // Создаем канал для подключения к серверу
+        // Create channel
         this.channel = ManagedChannelBuilder.forAddress(address, port)
                 .usePlaintext()
                 .build();
-        // Создаем stub для вызова методов
+        // Create stub for method call
         this.stub = ProcessServiceGrpc.newBlockingStub(channel);
     }
 
