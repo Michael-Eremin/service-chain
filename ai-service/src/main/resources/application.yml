@@ -9,7 +9,7 @@ grpc:
   server:
     port: 6565 # gRPC Port
 
-logging:
-  level:
-    net.devh.boot.grpc: DEBUG
-    io.grpc: DEBUG
+#logging:
+#  level:
+#    net.devh.boot.grpc: DEBUG
+#    io.grpc: DEBUG

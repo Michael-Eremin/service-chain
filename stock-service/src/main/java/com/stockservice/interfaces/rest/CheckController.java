@@ -1,7 +1,7 @@
 package com.stockservice.interfaces.rest;
 
 
-import com.stockservice.services.grpc.GrpcClientServiceImpl;
+import com.stockservice.infrastructure.grpc.GrpcClientServiceImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +21,10 @@ public class CheckController {
     }
 
     @GetMapping("/start-process")
-    public String startProcess(@RequestParam String command) {
-        return grpcClientService.sendStartProcessCommand(command);
+    public String startProcess(
+            @RequestParam String command,
+            @RequestParam Integer planId
+    ) {
+        return grpcClientService.sendStartProcessCommand(command, planId);
     }
 }

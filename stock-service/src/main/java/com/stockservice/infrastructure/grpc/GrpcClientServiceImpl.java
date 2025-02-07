@@ -1,4 +1,4 @@
-package com.stockservice.services.grpc;
+package com.stockservice.infrastructure.grpc;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class GrpcClientServiceImpl {
     private final ManagedChannel channel;
-    private final com.stockservice.services.grpc.ProcessServiceGrpc.ProcessServiceBlockingStub stub;
+    private final com.stockservice.infrastructure.grpc.ProcessServiceGrpc.ProcessServiceBlockingStub stub;
 
     public GrpcClientServiceImpl() {
         // create channel for server connect
@@ -17,18 +17,19 @@ public class GrpcClientServiceImpl {
                 .build();
 
         // create stub for methods call
-        this.stub = com.stockservice.services.grpc.ProcessServiceGrpc.newBlockingStub(channel);
+        this.stub = com.stockservice.infrastructure.grpc.ProcessServiceGrpc.newBlockingStub(channel);
     }
 
 
-    public String sendStartProcessCommand(String command) {
+    public String sendStartProcessCommand(String command, Integer planId) {
         // Create request
-        com.stockservice.services.grpc.StartProcessRequest request = com.stockservice.services.grpc.StartProcessRequest.newBuilder()
+        com.stockservice.infrastructure.grpc.StartProcessRequest request = com.stockservice.infrastructure.grpc.StartProcessRequest.newBuilder()
                 .setCommand(command)
+                .setPlanId(planId)
                 .build();
 
         // cal server method
-        com.stockservice.services.grpc.StartProcessResponse response = stub.startProcess(request);
+        com.stockservice.infrastructure.grpc.StartProcessResponse response = stub.startProcess(request);
 
         // Return response
         return response.getMessage();
