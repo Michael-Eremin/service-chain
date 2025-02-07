@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "com.aiservice.services.grpc";
+option java_package = "com.aiservice.interfaces.grpc";
 option java_outer_classname = "ProcessProto";
 
 service ProcessService {

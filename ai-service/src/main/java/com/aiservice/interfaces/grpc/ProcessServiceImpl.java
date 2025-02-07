@@ -1,4 +1,7 @@
-package com.aiservice.services.grpc;
+package com.aiservice.interfaces.grpc;
+import com.aiservice.interfaces.grpc.ProcessServiceGrpc;
+import com.aiservice.interfaces.grpc.StartProcessRequest;
+import com.aiservice.interfaces.grpc.StartProcessResponse;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
