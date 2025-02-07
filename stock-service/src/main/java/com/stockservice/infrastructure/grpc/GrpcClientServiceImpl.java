@@ -2,40 +2,60 @@ package com.stockservice.infrastructure.grpc;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.TimeUnit;
 
 
 @Service
 public class GrpcClientServiceImpl {
-    private final ManagedChannel channel;
-    private final com.stockservice.infrastructure.grpc.ProcessServiceGrpc.ProcessServiceBlockingStub stub;
+    private ManagedChannel channel;
+    private ProcessServiceGrpc.ProcessServiceBlockingStub stub;
+    @Value("${grpc.server.address}")
+    private  String address;
+    @Value("${grpc.server.port}")
+    private  int port;
 
-    public GrpcClientServiceImpl() {
-        // create channel for server connect
-        this.channel = ManagedChannelBuilder.forAddress("localhost", 6565)
+
+    public GrpcClientServiceImpl() {}
+
+    // Метод инициализации, который будет вызываться после внедрения значений
+    @PostConstruct
+    public void init() {
+        // Создаем канал для подключения к серверу
+        this.channel = ManagedChannelBuilder.forAddress(address, port)
                 .usePlaintext()
                 .build();
-
-        // create stub for methods call
-        this.stub = com.stockservice.infrastructure.grpc.ProcessServiceGrpc.newBlockingStub(channel);
+        // Создаем stub для вызова методов
+        this.stub = ProcessServiceGrpc.newBlockingStub(channel);
     }
 
 
     public String sendStartProcessCommand(String command, Integer planId) {
         // Create request
-        com.stockservice.infrastructure.grpc.StartProcessRequest request = com.stockservice.infrastructure.grpc.StartProcessRequest.newBuilder()
+        StartProcessRequest request = StartProcessRequest.newBuilder()
                 .setCommand(command)
                 .setPlanId(planId)
                 .build();
 
         // cal server method
-        com.stockservice.infrastructure.grpc.StartProcessResponse response = stub.startProcess(request);
+        StartProcessResponse response = stub.startProcess(request);
 
         // Return response
         return response.getMessage();
     }
 
     public void shutdown() throws InterruptedException {
-        channel.shutdown().awaitTermination(5, java.util.concurrent.TimeUnit.SECONDS);
+        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+    }
+
+    @PreDestroy
+    public void cleanup() throws InterruptedException {
+        if (channel != null && !channel.isShutdown()) {
+            channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+        }
     }
 }

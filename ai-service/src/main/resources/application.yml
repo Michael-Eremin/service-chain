@@ -1,13 +1,13 @@
-#spring:
-#  application:
-#    name: ai-service
+spring:
+  application:
+    name: ai-service
 
 server:
-  port: 8081 # REST API Port
+  port: ${SERVER_PORT}
 
 grpc:
   server:
-    port: 6565 # gRPC Port
+    port: ${GRPC_SERVER_PORT}
 
 #logging:
 #  level:
