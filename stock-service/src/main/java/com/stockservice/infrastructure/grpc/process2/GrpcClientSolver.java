@@ -47,10 +47,6 @@ public class GrpcClientSolver {
         return response.getMessage();
     }
 
-    public void shutdown() throws InterruptedException {
-        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
-    }
-
     @PreDestroy
     public void cleanup() throws InterruptedException {
         if (channel != null && !channel.isShutdown()) {

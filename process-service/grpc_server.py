@@ -1,7 +1,7 @@
 import grpc
 from concurrent import futures
 import logging
-import subprocess
+from subprocess import Popen, PIPE, DEVNULL
 import process2_pb2  # Изменено: Импортируем сгенерированный модуль process2_pb2
 import process2_pb2_grpc  # Изменено: Импортируем сгенерированный модуль process2_pb2_grpc
 
@@ -16,16 +16,20 @@ class SolverServiceServicer(process2_pb2_grpc.SolverServiceServicer):  # Изм�
         command = request.command  # Добавлено: Получаем значение поля command
         plan_id = request.planId
         logger.info(f"Получен запрос на запуск solver с command: {command}, planId: {plan_id}")
-        # command for call process_chain.py
 
+        # command for call process_chain.py
         cmd = f"python3 process_chain.py --plan {plan_id}"
 
         try:
             # run subprocess
-            process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
+            process = Popen(cmd, stdout=DEVNULL, stderr=DEVNULL, shell=True)
+
             logger.info(f"Command started: {cmd}")
             logger.info(f"process.pid {process.pid}")
-            return process2_pb2.StartSolverResponse(message=f"Solver с command={command} и planId={plan_id} успешно запущен")
+            return process2_pb2.StartSolverResponse(
+                    message=f"Solver с command={command},"
+                            f" planId={plan_id},"
+                            f" process.pid={process.pid} is started")
         except Exception as e:
             logger.error(f"Error command: {cmd}\n{e}")
             return process2_pb2.StartSolverResponse(message=f"Error run process: {str(e)}")
