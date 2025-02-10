@@ -43,6 +43,7 @@ public class GrpcClientSolver {
         // cal server method
         StartSolverResponse response = stub.startSolver(request);
 
+        System.out.println("Server response: " + response.getMessage());
         // Return response
         return response.getMessage();
     }

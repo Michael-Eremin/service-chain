@@ -2,6 +2,7 @@ import argparse
 import time
 import logging
 
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -12,7 +13,7 @@ def simulate_process(plan_id):
     logger.info(f"Process started with planId={plan_id}")
     time.sleep(20)  # Simulate a long process (20 seconds)
     logger.info(f"Process finished with planId={plan_id}")
-    return f"RETURN Process finished with planId={plan_id}"
+    return f"RETURN finished planId={plan_id}"
 
 if __name__ == '__main__':
 
@@ -24,5 +25,6 @@ if __name__ == '__main__':
     handler.setFormatter(formatter)
     logger.addHandler(handler)
 
+
     res = simulate_process(args.plan)
-    logger.info(f"Process finished: {res}")
+    logger.info(f"Process UPDATE to --> FINISHED: {res}")
