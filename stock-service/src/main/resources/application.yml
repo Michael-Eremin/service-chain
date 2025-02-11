@@ -11,5 +11,5 @@ grpc:
       address: ${GRPC_SERVER_ADDRESS_1}
       port: ${GRPC_SERVER_PORT_1}
     proc2:
-      address: ${GRPC_SERVER_ADDRESS_2}
+      host: ${GRPC_SERVER_HOST_2}
       port: ${GRPC_SERVER_PORT_2}
