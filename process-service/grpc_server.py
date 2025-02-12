@@ -26,7 +26,7 @@ shutdown_event = threading.Event()
 class SolverServiceServicer(process2_pb2_grpc.SolverServiceServicer):
     def StartSolver(self, request, context):
         if shutdown_event.is_set():
-            # Если сервер завершается, отклоняем новые запросы
+            # If server stop, not get new requests
             context.set_code(grpc.StatusCode.UNAVAILABLE)
             context.set_details("Server is shutting down")
             return process2_pb2.StartSolverResponse()
@@ -53,7 +53,7 @@ class SolverServiceServicer(process2_pb2_grpc.SolverServiceServicer):
         )
 
 def process_tasks():
-    """Фоновая функция для обработки задач из очереди"""
+    """Background tasks from queue handler"""
     while not shutdown_event.is_set() or not task_queue.empty():
         try:
             # Get task from queue (block call)
